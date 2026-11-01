@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>晨光耳鼻喉科診所｜線上預約</title>
+<meta name="description" content="晨光耳鼻喉科診所：醫師簡介、診次表、線上預約時段、衛教資訊與交通方式。">
+<style>
+  /* =========================================================
+     設計變數（Design Tokens）：集中管理顏色、圓角、陰影
+     ========================================================= */
+  :root {
+    --bg: #f7f5f0;
+    --surface: #ffffff;
+    --surface-2: #eef3f1;
+    --text: #1f2a2e;
+    --text-muted: #5b6b70;
+    --line: #dde3e1;
+    --primary: #1f6f6a;        /* 主色：沉穩的藥草綠 */
+    --primary-ink: #ffffff;
+    --primary-soft: #d9ebe8;
+    --accent: #c9792b;         /* 輔色：溫暖的琥珀 */
+    --ok: #2e7d4f;    --ok-soft: #dcf0e3;
+    --warn: #a3620a;  --warn-soft: #fbecd2;
+    --full: #b23a3a;  --full-soft: #f6dddd;
+    --notice-bg: #fff8e6;
+    --notice-line: #e8c870;
+    --radius: 14px;
+    --radius-sm: 8px;
+    --shadow: 0 1px 2px rgba(20,40,40,.06), 0 6px 20px rgba(20,40,40,.06);
+    --max: 1120px;
+    --font: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #121a1b; --surface: #1a2426; --surface-2: #213033;
+      --text: #e7eeec; --text-muted: #a3b3b2; --line: #2e3e40;
+      --primary: #5cc0b5; --primary-ink: #0d1b1a; --primary-soft: #1f3b39;
+      --accent: #e3a35f;
+      --ok: #7fd3a0; --ok-soft: #1d3628;
+      --warn: #f0b860; --warn-soft: #3a2e17;
+      --full: #f08a8a; --full-soft: #3d2121;
+      --notice-bg: #2b2716; --notice-line: #6b5a22;
+    }
+  }
+
+  /* ========== 基礎設定 ========== */
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+  body {
+    margin: 0; font-family: var(--font); color: var(--text); background: var(--bg);
+    line-height: 1.7; font-size: 16px; -webkit-text-size-adjust: 100%;
+  }
+  img { max-width: 100%; display: block; }
+  a { color: var(--primary); }
+  h1, h2, h3 { line-height: 1.3; margin: 0 0 .5em; }
+  h2 { font-size: clamp(1.4rem, 3.5vw, 1.9rem); }
+  h3 { font-size: 1.1rem; }
+  p { margin: 0 0 1em; }
+  .container { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 16px; }
+  section { padding: 56px 0; }
+  section:nth-of-type(even) { background: var(--surface-2); }
+  .eyebrow { color: var(--accent); font-weight: 700; font-size: .85rem; letter-spacing: .08em; margin-bottom: .4em; display: block; }
+  .section-lead { color: var(--text-muted); max-width: 60ch; margin-bottom: 28px; }
+  .visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+  /* ========== 醫療免責聲明（共用元件） ========== */
+  .disclaimer {
+    display: flex; gap: 8px; align-items: flex-start;
+    background: var(--notice-bg); border: 1px solid var(--notice-line);
+    border-radius: var(--radius-sm); padding: 8px 12px;
+    font-size: .85rem; color: var(--text); margin: 12px 0 0;
+  }
+  .disclaimer::before { content: "ⓘ"; font-weight: 700; color: var(--accent); }
+
+  /* ========== 按鈕 ========== */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    min-height: 48px; padding: 0 22px; border-radius: 999px; border: 2px solid transparent;
+    font: inherit; font-weight: 700; text-decoration: none; cursor: pointer; transition: transform .15s, background .15s;
+  }
+  .btn:active { transform: scale(.98); }
+  .btn-primary { background: var(--primary); color: var(--primary-ink); }
+  .btn-primary:hover { filter: brightness(1.08); }
+  .btn-ghost { background: transparent; color: var(--primary); border-color: var(--primary); }
+  .btn[disabled] { opacity: .5; cursor: not-allowed; }
+
+  /* ========== 頁首導覽 ========== */
+  .site-header {
+    position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--surface) 92%, transparent);
+    backdrop-filter: blur(8px); border-bottom: 1px solid var(--line);
+  }
+  .site-header .container { display: flex; align-items: center; justify-content: space-between; height: 60px; gap: 12px; }
+  .brand { font-weight: 800; text-decoration: none; color: var(--text); display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+  .brand-mark { width: 30px; height: 30px; border-radius: 8px; background: var(--primary); color: var(--primary-ink); display: grid; place-items: center; font-size: .9rem; }
+  .nav { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a { text-decoration: none; color: var(--text-muted); padding: 6px 10px; border-radius: 999px; font-size: .92rem; white-space: nowrap; }
+  .nav a:hover { background: var(--surface-2); color: var(--text); }
+  @media (max-width: 767px) { .nav { display: none; } }
+
+  /* ========== 1. Hero ========== */
+  .hero { padding: 48px 0 56px; background: radial-gradient(1200px 400px at 85% -10%, var(--primary-soft), transparent 70%), var(--bg); }
+  .hero-grid { display: grid; gap: 28px; }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+  .tag { background: var(--primary-soft); color: var(--primary); font-size: .82rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+  .hero h1 { font-size: clamp(1.9rem, 6vw, 3rem); margin-bottom: .3em; }
+  .hero-claim { font-size: 1.15rem; color: var(--text-muted); max-width: 32em; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
+  .fit-card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; border: 1px solid var(--line); }
+  .fit-card h2 { font-size: 1.1rem; }
+  .fit-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+  .fit-list li { display: flex; gap: 8px; }
+  .fit-list li::before { content: "✓"; color: var(--ok); font-weight: 800; }
+  .quick-facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 16px; text-align: center; }
+  .quick-facts div { background: var(--surface-2); border-radius: var(--radius-sm); padding: 10px 4px; }
+  .quick-facts strong { display: block; font-size: 1.15rem; color: var(--primary); }
+  .quick-facts span { font-size: .78rem; color: var(--text-muted); }
+
+  /* ========== 2. 醫師簡介 ========== */
+  .doctor-grid { display: grid; gap: 20px; }
+  .doctor-card { background: var(--surface); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); }
+  .doctor-head { display: flex; gap: 16px; align-items: center; margin-bottom: 16px; }
+  .avatar { width: 76px; height: 76px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent)); color: #fff; display: grid; place-items: center; font-size: 1.8rem; font-weight: 800; flex-shrink: 0; }
+  .doctor-head p { margin: 0; color: var(--text-muted); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 0; }
+  .chips li { border: 1px solid var(--line); padding: 4px 12px; border-radius: 999px; font-size: .9rem; background: var(--surface-2); }
+  .timeline { list-style: none; margin: 0; padding: 0; border-left: 2px solid var(--primary-soft); }
+  .timeline li { position: relative; padding: 0 0 12px 18px; }
+  .timeline li::before { content: ""; position: absolute; left: -7px; top: 8px; width: 12px; height: 12px; border-radius: 50%; background: var(--primary); }
+  .philosophy { font-size: 1.05rem; border-left: 4px solid var(--accent); padding-left: 14px; margin: 0; }
+
+  /* ========== 3. 診次表 ========== */
+  .table-wrap { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+  table.schedule { width: 100%; border-collapse: collapse; text-align: center; }
+  .schedule caption { text-align: left; padding: 14px 16px; font-weight: 700; border-bottom: 1px solid var(--line); }
+  .schedule th, .schedule td { padding: 12px 6px; border-bottom: 1px solid var(--line); font-size: .95rem; }
+  .schedule thead th { background: var(--primary-soft); color: var(--primary); }
+  .schedule tbody th { text-align: left; padding-left: 16px; white-space: nowrap; }
+  .schedule small { display: block; color: var(--text-muted); font-weight: 400; font-size: .78rem; }
+  .cell-open { color: var(--ok); font-weight: 700; }
+  .cell-special { color: var(--accent); font-weight: 700; font-size: .85rem; }
+  .cell-closed { color: var(--text-muted); background: repeating-linear-gradient(45deg, transparent 0 6px, var(--surface-2) 6px 12px); }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: .88rem; color: var(--text-muted); margin-top: 14px; }
+  .session-cards { display: grid; gap: 12px; margin-top: 20px; }
+  .session-card { background: var(--surface); border-radius: var(--radius-sm); padding: 14px 16px; border-left: 4px solid var(--primary); }
+  .session-card.special { border-left-color: var(--accent); }
+  .session-card.closed { border-left-color: var(--full); }
+  .session-card h3 { margin-bottom: 2px; font-size: 1rem; }
+  .session-card p { margin: 0; font-size: .9rem; color: var(--text-muted); }
+  /* 手機版：表格改為可橫向捲動，避免擠壓 */
+  @media (max-width: 599px) {
+    .table-scroll { overflow-x: auto; }
+    table.schedule { min-width: 560px; }
+  }
+
+  /* ========== 4. 預約時段 ========== */
+  .booking-grid { display: grid; gap: 24px; }
+  .date-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; scroll-snap-type: x mandatory; }
+  .date-tab {
+    scroll-snap-align: start; flex: 0 0 auto; min-width: 72px; padding: 8px 10px; border-radius: var(--radius-sm);
+    border: 1px solid var(--line); background: var(--surface); color: var(--text); font: inherit; cursor: pointer; text-align: center; line-height: 1.3;
+  }
+  .date-tab strong { display: block; font-size: 1.1rem; }
+  .date-tab span { font-size: .8rem; color: var(--text-muted); }
+  .date-tab[aria-selected="true"] { background: var(--primary); color: var(--primary-ink); border-color: var(--primary); }
+  .date-tab[aria-selected="true"] span { color: inherit; }
+  .slot-list { display: grid; gap: 12px; margin-top: 16px; }
+  .slot-card {
+    position: relative; text-align: left; width: 100%; font: inherit; color: var(--text); cursor: pointer;
+    background: var(--surface); border: 2px solid var(--line); border-radius: var(--radius); padding: 16px; transition: border-color .15s, box-shadow .15s;
+  }
+  .slot-card:hover:not([disabled]) { border-color: var(--primary); }
+  .slot-card[aria-pressed="true"] { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
+  .slot-card[disabled] { cursor: not-allowed; opacity: .75; }
+  .slot-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .slot-name { font-weight: 800; font-size: 1.05rem; }
+  .slot-time { color: var(--text-muted); font-size: .9rem; }
+  .badge { font-size: .8rem; font-weight: 800; padding: 3px 10px; border-radius: 999px; white-space: nowrap; }
+  .badge-open { background: var(--ok-soft); color: var(--ok); }
+  .badge-near { background: var(--warn-soft); color: var(--warn); }
+  .badge-full { background: var(--full-soft); color: var(--full); }
+  .meter { height: 8px; background: var(--surface-2); border-radius: 999px; overflow: hidden; margin: 10px 0 6px; }
+  .meter > i { display: block; height: 100%; border-radius: inherit; }
+  .slot-count { font-size: .85rem; color: var(--text-muted); }
+  .empty-day { background: var(--surface); padding: 24px; border-radius: var(--radius); text-align: center; color: var(--text-muted); }
+
+  /* 預約表單 */
+  .form-card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px; }
+  .selected-summary { background: var(--primary-soft); border-radius: var(--radius-sm); padding: 10px 14px; margin-bottom: 16px; font-weight: 700; color: var(--primary); }
+  .selected-summary.empty { background: var(--surface-2); color: var(--text-muted); font-weight: 400; }
+  .field { margin-bottom: 16px; }
+  .field label, .field .label { display: block; font-weight: 700; margin-bottom: 6px; }
+  .req { color: var(--full); }
+  .field input, .field select, .field textarea {
+    width: 100%; min-height: 48px; padding: 10px 12px; font: inherit; font-size: 16px; /* 16px 避免 iOS 自動放大 */
+    color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius-sm);
+  }
+  .field textarea { min-height: 96px; resize: vertical; }
+  .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
+  .hint { font-size: .82rem; color: var(--text-muted); margin-top: 4px; }
+  .error-msg { font-size: .85rem; color: var(--full); margin-top: 4px; min-height: 0; }
+  .field.invalid input, .field.invalid select { border-color: var(--full); }
+  fieldset.prefs { border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 12px 14px; margin: 0 0 16px; }
+  fieldset.prefs legend { font-weight: 700; padding: 0 6px; }
+  .switch-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 8px 0; }
+  .switch-row + .switch-row { border-top: 1px dashed var(--line); }
+  .switch-row p { margin: 0; font-size: .85rem; color: var(--text-muted); }
+  .switch {
+    flex-shrink: 0; width: 52px; height: 30px; border-radius: 999px; border: none; background: var(--line); position: relative; cursor: pointer; transition: background .15s;
+  }
+  .switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 24px; height: 24px; border-radius: 50%; background: #fff; transition: transform .15s; box-shadow: 0 1px 3px rgba(0,0,0,.25); }
+  .switch[aria-checked="true"] { background: var(--primary); }
+  .switch[aria-checked="true"]::after { transform: translateX(22px); }
+  .cancel-rule { font-size: .88rem; background: var(--surface-2); border-radius: var(--radius-sm); padding: 10px 12px; }
+  .cancel-rule ul { margin: 4px 0 0; padding-left: 1.2em; }
+  .success {
+    display: none; margin-top: 16px; background: var(--ok-soft); color: var(--text); border: 1px solid var(--ok); border-radius: var(--radius-sm); padding: 14px;
+  }
+  .success.show { display: block; }
+  .success h3 { color: var(--ok); }
+
+  /* 我的預約與 localStorage 教學面板 */
+  .my-bookings { margin-top: 20px; border-top: 1px solid var(--line); padding-top: 16px; }
+  .my-bookings-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .my-bookings-head h3 { margin: 0; }
+  .storage-badge { font-size: .78rem; font-weight: 700; padding: 2px 10px; border-radius: 999px; background: var(--ok-soft); color: var(--ok); white-space: nowrap; }
+  .storage-badge.off { background: var(--full-soft); color: var(--full); }
+  .booking-list { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 8px; }
+  .booking-item { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: var(--surface-2); border-radius: var(--radius-sm); padding: 10px 12px; font-size: .92rem; }
+  .booking-item small { display: block; color: var(--text-muted); }
+  .btn-small { min-height: 36px; padding: 0 14px; font-size: .85rem; }
+  .btn-danger { background: transparent; color: var(--full); border-color: var(--full); }
+  .storage-empty { color: var(--text-muted); font-size: .9rem; margin: 10px 0 0; }
+  details.devtools { margin-top: 14px; background: var(--surface-2); border-radius: var(--radius-sm); padding: 10px 12px; font-size: .88rem; }
+  details.devtools summary { cursor: pointer; font-weight: 700; }
+  details.devtools pre { margin: 8px 0; max-height: 220px; overflow: auto; background: #10302d; color: #d6fff7; padding: 10px; border-radius: 6px; font-size: .78rem; white-space: pre-wrap; word-break: break-all; }
+  .devtools-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  /* ========== 5. 衛教資訊 ========== */
+  .edu-grid { display: grid; gap: 16px; }
+  .edu-card { background: var(--surface); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); display: flex; flex-direction: column; }
+  .edu-icon { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; font-size: 1.4rem; background: var(--primary-soft); margin-bottom: 10px; }
+  .edu-card ul { padding-left: 1.2em; margin: 0 0 auto; }
+  .edu-card li { margin-bottom: 6px; }
+  details.faq { background: var(--surface); border-radius: var(--radius-sm); border: 1px solid var(--line); padding: 12px 16px; margin-top: 10px; }
+  details.faq summary { cursor: pointer; font-weight: 700; }
+  details.faq p { margin: 8px 0 0; color: var(--text-muted); }
+
+  /* ========== 6. 交通與候診 ========== */
+  .visit-grid { display: grid; gap: 16px; }
+  .info-card { background: var(--surface); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
+  .info-card dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 8px 14px; }
+  .info-card dt { font-weight: 700; color: var(--text-muted); }
+  .info-card dd { margin: 0; }
+  .map-placeholder {
+    margin-top: 14px; height: 180px; border-radius: var(--radius-sm); display: grid; place-items: center; color: var(--text-muted); font-size: .9rem;
+    background: linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0/24px 24px, linear-gradient(var(--line) 1px, transparent 1px) 0 0/24px 24px, var(--surface-2);
+    position: relative;
+  }
+  .map-pin { position: absolute; top: 42%; left: 52%; font-size: 1.8rem; transform: translate(-50%, -100%); }
+  .queue-board { background: #10302d; color: #e9fffb; border-radius: var(--radius); padding: 20px; text-align: center; box-shadow: var(--shadow); }
+  .queue-board h3 { color: #9fe3d8; }
+  .queue-now { font-size: clamp(3.2rem, 14vw, 5rem); font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1; margin: 6px 0; letter-spacing: .04em; }
+  .queue-meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+  .queue-meta div { background: rgba(255,255,255,.08); border-radius: var(--radius-sm); padding: 8px 4px; }
+  .queue-meta strong { display: block; font-size: 1.2rem; }
+  .queue-meta span { font-size: .78rem; opacity: .8; }
+  .live-dot { display: inline-block; width: 8px; height: 8px; background: #ff6b6b; border-radius: 50%; margin-right: 6px; animation: pulse 1.4s infinite; }
+  @keyframes pulse { 50% { opacity: .25; } }
+  .queue-board .disclaimer { color: var(--text); text-align: left; }
+  .wait-steps { counter-reset: s; list-style: none; padding: 0; margin: 0; }
+  .wait-steps li { counter-increment: s; display: flex; gap: 10px; margin-bottom: 10px; }
+  .wait-steps li::before { content: counter(s); flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; background: var(--primary); color: var(--primary-ink); display: grid; place-items: center; font-weight: 700; font-size: .85rem; }
+
+  /* ========== 頁尾與手機固定 CTA ========== */
+  footer { background: #10302d; color: #cfe7e2; padding: 32px 0 96px; font-size: .9rem; }
+  footer a { color: #9fe3d8; }
+  footer .disclaimer { color: var(--text); }
+  .mobile-cta {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; display: flex; gap: 10px; padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+    background: var(--surface); border-top: 1px solid var(--line); box-shadow: 0 -4px 16px rgba(0,0,0,.08);
+  }
+  .mobile-cta .btn { flex: 1; min-height: 46px; padding: 0 12px; }
+
+  /* ========== RWD：平板與桌機（手機預設單欄） ========== */
+  @media (min-width: 600px) {
+    .session-cards { grid-template-columns: repeat(2, 1fr); }
+    .slot-list { grid-template-columns: repeat(2, 1fr); }
+    .edu-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 768px) {
+    section { padding: 80px 0; }
+    .hero { padding: 80px 0; }
+    .hero-grid { grid-template-columns: 1.3fr 1fr; align-items: center; }
+    .doctor-grid { grid-template-columns: 1fr 1fr; }
+    .doctor-grid .doctor-card:first-child { grid-row: span 2; }
+    .visit-grid { grid-template-columns: repeat(2, 1fr); }
+    .mobile-cta { display: none; }
+    footer { padding-bottom: 32px; }
+  }
+  @media (min-width: 1024px) {
+    .booking-grid { grid-template-columns: 1.25fr 1fr; align-items: start; }
+    .form-card { position: sticky; top: 80px; }
+    .edu-grid { grid-template-columns: repeat(3, 1fr); }
+    .session-cards { grid-template-columns: repeat(4, 1fr); }
+    .visit-grid { grid-template-columns: 1fr 1fr 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+
+<!-- ================= 頁首導覽 ================= -->
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true">晨</span><span data-bind="clinic.name">晨光耳鼻喉科診所</span></a>
+    <nav class="nav" aria-label="主要導覽">
+      <a href="#doctor">醫師簡介</a>
+      <a href="#schedule">診次表</a>
+      <a href="#booking">線上預約</a>
+      <a href="#education">衛教資訊</a>
+      <a href="#visit">交通與候診</a>
+    </nav>
+    <a class="btn btn-primary" href="#booking" style="min-height:40px;padding:0 16px;font-size:.92rem">立即預約</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ================= 1. Hero 首頁 ================= -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="container hero-grid">
+      <div>
+        <div class="hero-tags">
+          <span class="tag" data-bind="clinic.department">耳鼻喉科</span>
+          <span class="tag">健保特約</span>
+          <span class="tag">線上預約・現場候診</span>
+        </div>
+        <h1 id="hero-title" data-bind="clinic.name">晨光耳鼻喉科診所</h1>
+        <p class="hero-claim">「把話聽完，再開處方。」<br>每一位病人都值得被好好解釋：哪裡不舒服、為什麼、接下來怎麼照顧。</p>
+        <p class="disclaimer">本網站僅提供預約與資訊參考，不取代醫師當面診斷</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#booking">📅 預約看診時段</a>
+          <a class="btn btn-ghost" href="#schedule">查看診次表</a>
+        </div>
+      </div>
+
+      <!-- 協助第一次來的使用者快速判斷「適不適合我」 -->
+      <aside class="fit-card" aria-labelledby="fit-title">
+        <h2 id="fit-title">第一次來？30 秒判斷是否適合</h2>
+        <ul class="fit-list">
+          <li>鼻塞、流鼻水、打噴嚏反覆發作</li>
+          <li>喉嚨痛、聲音沙啞超過一週</li>
+          <li>耳朵悶塞、耳鳴、中耳炎追蹤</li>
+          <li>需要過敏性鼻炎長期管理或慢性處方箋</li>
+        </ul>
+        <p class="disclaimer">本網站僅提供預約與資訊參考，不取代醫師當面診斷。若有呼吸困難、大量出血或高燒不退，請立即前往急診或撥打 119。</p>
+        <div class="quick-facts">
+          <div><strong>6 天</strong><span>每週看診</span></div>
+          <div><strong>3 診</strong><span>早／午／夜</span></div>
+          <div><strong>約 15 分</strong><span>預約平均候診</span></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ================= 2. 醫師簡介 ================= -->
+  <section id="doctor" aria-labelledby="doctor-title">
+    <div class="container">
+      <span class="eyebrow">DOCTOR</span>
+      <h2 id="doctor-title">醫師簡介</h2>
+      <p class="section-lead">由同一位主治醫師長期追蹤，讓你的病史不必每次重講。</p>
+
+      <div class="doctor-grid">
+        <article class="doctor-card">
+          <div class="doctor-head">
+            <div class="avatar" aria-hidden="true">林</div>
+            <div>
+              <h3 style="margin:0" id="doctor-name">林語安 醫師</h3>
+              <p>院長・耳鼻喉科專科醫師</p>
+            </div>
+          </div>
+          <h3>學經歷</h3>
+          <ul class="timeline" id="doctor-experience"><!-- 由 JS 依 Doctor 資料產生 --></ul>
+        </article>
+
+        <article class="doctor-card">
+          <h3>專長</h3>
+          <ul class="chips" id="doctor-specialties"><!-- 由 JS 產生 --></ul>
+        </article>
+
+        <article class="doctor-card">
+          <h3>看診理念</h3>
+          <blockquote class="philosophy" id="doctor-philosophy"></blockquote>
+          <p class="disclaimer">本網站僅提供預約與資訊參考，不取代醫師當面診斷</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 3. 診次表 ================= -->
+  <section id="schedule" aria-labelledby="schedule-title">
+    <div class="container">
+      <span class="eyebrow">SCHEDULE</span>
+      <h2 id="schedule-title">診次表</h2>
+      <p class="section-lead">一般門診每週一至週六開放；特殊診別需預約，名額較少。國定假日另行公告。</p>
+
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table class="schedule" id="schedule-table">
+            <caption>每週門診時間</caption>
+            <thead>
+              <tr><th scope="col">時段</th><th scope="col">一</th><th scope="col">二</th><th scope="col">三</th><th scope="col">四</th><th scope="col">五</th><th scope="col">六</th><th scope="col">日</th></tr>
+            </thead>
+            <tbody><!-- 由 JS 依 SessionType 資料產生 --></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="legend" aria-hidden="false">
+        <span><span class="cell-open">● </span>一般門診</span>
+        <span><span class="cell-special">★ </span>特殊診別</span>
+        <span>▨ 休診</span>
+      </div>
+
+      <div class="session-cards" id="session-cards"><!-- 由 JS 產生診別說明卡 --></div>
+    </div>
+  </section>
+
+  <!-- ================= 4. 預約時段 ================= -->
+  <section id="booking" aria-labelledby="booking-title">
+    <div class="container">
+      <span class="eyebrow">BOOKING</span>
+      <h2 id="booking-title">預約時段</h2>
+      <p class="section-lead">先選日期，再點選時段卡片。綠色可預約、橘色接近額滿、紅色已額滿（可改選其他時段或現場候補）。</p>
+
+      <div class="booking-grid">
+        <div>
+          <div class="date-tabs" role="tablist" aria-label="選擇日期" id="date-tabs"></div>
+          <div class="slot-list" id="slot-list" aria-live="polite"></div>
+          <div class="legend">
+            <span><span class="badge badge-open">可預約</span> 剩餘名額 30% 以上</span>
+            <span><span class="badge badge-near">接近額滿</span> 剩餘不到 30%</span>
+            <span><span class="badge badge-full">額滿</span> 無法線上預約</span>
+          </div>
+        </div>
+
+        <!-- 預約表單：input / select 的 name 對應 PatientRequest 欄位 -->
+        <form class="form-card" id="booking-form" novalidate aria-labelledby="form-title">
+          <h3 id="form-title">填寫預約資料</h3>
+          <div class="selected-summary empty" id="selected-summary" aria-live="polite">尚未選擇時段，請先點選左側（手機版為上方）時段卡片</div>
+
+          <div class="field">
+            <label for="f-name">姓名 <span class="req">*</span></label>
+            <input id="f-name" name="name" type="text" autocomplete="name" required maxlength="20" placeholder="例：王小明">
+            <div class="error-msg" data-error-for="name"></div>
+          </div>
+
+          <div class="field">
+            <label for="f-phone">聯絡方式（手機或市話）<span class="req">*</span></label>
+            <input id="f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required placeholder="例：0912345678">
+            <div class="hint">用於預約確認簡訊與看診前提醒</div>
+            <div class="error-msg" data-error-for="phone"></div>
+          </div>
+
+          <div class="field">
+            <label for="f-note">症狀備註（選填）</label>
+            <textarea id="f-note" name="symptomNote" maxlength="200" placeholder="例：鼻塞約兩週，晚上較嚴重"></textarea>
+            <div class="hint">簡短描述即可，方便醫師事先了解，最多 200 字</div>
+            <p class="disclaimer">本網站僅提供預約與資訊參考，不取代醫師當面診斷。填寫內容不會自動給出任何醫療建議。</p>
+          </div>
+
+          <div class="field">
+            <label for="f-chronic">是否領取慢性病連續處方箋 <span class="req">*</span></label>
+            <select id="f-chronic" name="isChronicPrescription" required>
+              <option value="">請選擇</option>
+              <option value="false">否，一般看診</option>
+              <option value="true">是，回診領取慢箋</option>
+            </select>
+            <div class="hint">領慢箋請攜帶健保卡與原處方箋</div>
+            <div class="error-msg" data-error-for="isChronicPrescription"></div>
+          </div>
+
+          <!-- ReminderPreference：以開關按鈕呈現（不使用 input，避免與 PatientRequest 欄位混淆） -->
+          <fieldset class="prefs">
+            <legend>提醒設定</legend>
+            <div class="switch-row">
+              <div><strong id="lbl-sms">簡訊提醒</strong><p>看診前一天 18:00 傳送提醒</p></div>
+              <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="lbl-sms" data-pref="smsReminder"></button>
+            </div>
+            <div class="switch-row">
+              <div><strong id="lbl-follow">複診提醒</strong><p>醫師建議回診日前 3 天通知</p></div>
+              <button type="button" class="switch" role="switch" aria-checked="false" aria-labelledby="lbl-follow" data-pref="followUpReminder"></button>
+            </div>
+          </fieldset>
+
+          <div class="cancel-rule" id="cancel-rule">
+            <strong>取消規則</strong>
+            <ul></ul>
+          </div>
+
+          <button class="btn btn-primary" type="submit" style="width:100%;margin-top:16px">確認預約</button>
+          <div class="success" id="booking-success" role="status" tabindex="-1"></div>
+
+          <!-- 我的預約：資料存在此瀏覽器的 localStorage，重新整理後仍會保留 -->
+          <div class="my-bookings" aria-labelledby="my-bookings-title">
+            <div class="my-bookings-head">
+              <h3 id="my-bookings-title">我的預約</h3>
+              <span class="storage-badge" id="storage-badge">已儲存在此瀏覽器</span>
+            </div>
+            <ul class="booking-list" id="booking-list" aria-live="polite"></ul>
+            <p class="storage-empty" id="booking-empty">目前沒有預約紀錄。</p>
+
+            <details class="devtools">
+              <summary>🧑‍🏫 教學面板：查看 localStorage 內容</summary>
+              <p style="margin:8px 0 0">以下就是瀏覽器實際存下的字串（JSON 格式）。也可以按 F12 →「Application」→「Local Storage」查看。</p>
+              <pre id="storage-dump"></pre>
+              <div class="devtools-actions">
+                <button type="button" class="btn btn-ghost btn-small" id="btn-refresh-dump">重新讀取</button>
+                <button type="button" class="btn btn-danger btn-small" id="btn-reset-storage">清除所有示範資料</button>
+              </div>
+            </details>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 5. 衛教資訊 ================= -->
+  <section id="education" aria-labelledby="edu-title">
+    <div class="container">
+      <span class="eyebrow">HEALTH EDUCATION</span>
+      <h2 id="edu-title">衛教資訊</h2>
+      <p class="section-lead">以下為一般衛教常識，幫助你看診前做準備；實際狀況仍需由醫師評估。</p>
+      <p class="disclaimer" style="margin-bottom:20px">本網站僅提供預約與資訊參考，不取代醫師當面診斷</p>
+
+      <div class="edu-grid">
+        <article class="edu-card">
+          <div class="edu-icon" aria-hidden="true">🤧</div>
+          <h3>常見症狀</h3>
+          <ul>
+            <li><strong>過敏性鼻炎：</strong>早晨連續噴嚏、清水鼻涕、鼻癢</li>
+            <li><strong>鼻竇炎：</strong>黃綠鼻涕、臉頰悶痛、嗅覺變差</li>
+            <li><strong>咽喉炎：</strong>吞嚥疼痛、喉嚨乾癢、聲音沙啞</li>
+            <li><strong>中耳炎：</strong>耳悶、耳痛，兒童可能拉耳朵或哭鬧</li>
+          </ul>
+          <p class="disclaimer">症狀描述僅供參考，本網站僅提供預約與資訊參考，不取代醫師當面診斷</p>
+        </article>
+
+        <article class="edu-card">
+          <div class="edu-icon" aria-hidden="true">💊</div>
+          <h3>用藥提醒</h3>
+          <ul>
+            <li>請依藥袋標示的時間與劑量服用，勿自行加量或停藥</li>
+            <li>抗組織胺可能引起嗜睡，服藥後避免開車或操作機械</li>
+            <li>鼻噴劑使用前先擤鼻涕，噴頭朝外側、避開鼻中隔</li>
+            <li>正在服用其他藥物、懷孕或哺乳中，請於看診時主動告知</li>
+          </ul>
+          <p class="disclaimer">用藥方式以醫師處方及藥師說明為準。本網站僅提供預約與資訊參考，不取代醫師當面診斷</p>
+        </article>
+
+        <article class="edu-card">
+          <div class="edu-icon" aria-hidden="true">🔁</div>
+          <h3>複診提醒</h3>
+          <ul>
+            <li>藥物服用完畢但症狀未改善，請依醫師建議回診</li>
+            <li>慢性處方箋可於每次領藥期限前 10 日內領取</li>
+            <li>回診請攜帶健保卡、藥袋或目前使用的噴劑</li>
+            <li>可在預約表單開啟「複診提醒」，我們會提前通知</li>
+          </ul>
+          <p class="disclaimer">回診時間以醫師當次評估為準。本網站僅提供預約與資訊參考，不取代醫師當面診斷</p>
+        </article>
+      </div>
+
+      <details class="faq">
+        <summary>什麼情況不要等預約，應該直接就醫？</summary>
+        <p>出現呼吸困難、喉嚨腫到無法吞口水、大量流鼻血止不住、突發性單側聽力喪失或高燒不退等情況，請立即前往急診或撥打 119。</p>
+      </details>
+      <details class="faq">
+        <summary>預約後可以帶小朋友一起看嗎？</summary>
+        <p>可以，每位看診者需各自完成一筆預約，以便準備病歷。週六上午另有兒童耳鼻喉特別門診。</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================= 6. 交通與候診 ================= -->
+  <section id="visit" aria-labelledby="visit-title">
+    <div class="container">
+      <span class="eyebrow">VISIT</span>
+      <h2 id="visit-title">交通與候診</h2>
+      <p class="section-lead">出門前看一下目前叫號，抓好時間再出發，少等一點。</p>
+
+      <div class="visit-grid">
+        <article class="info-card">
+          <h3>診所位置</h3>
+          <dl>
+            <dt>地址</dt><dd id="clinic-address"></dd>
+            <dt>電話</dt><dd><a id="clinic-phone" href="#"></a></dd>
+            <dt>公車</dt><dd>「晨光市場」站下車，步行約 2 分鐘</dd>
+          </dl>
+          <div class="map-placeholder" role="img" aria-label="地圖示意">
+            <span class="map-pin" aria-hidden="true">📍</span>
+            <span style="position:absolute;bottom:10px">地圖示意（正式版可嵌入 Google 地圖）</span>
+          </div>
+        </article>
+
+        <article class="info-card">
+          <h3>停車資訊</h3>
+          <dl>
+            <dt>汽車</dt><dd>診所後方合作停車場，看診可折抵 1 小時</dd>
+            <dt>機車</dt><dd>騎樓前方設有機車停車格</dd>
+            <dt>無障礙</dt><dd>一樓診間，入口設有斜坡，輪椅可直接進出</dd>
+          </dl>
+          <h3 style="margin-top:18px">候診流程</h3>
+          <ol class="wait-steps">
+            <li>預約時段開始前 10 分鐘抵達，櫃台出示健保卡報到</li>
+            <li>測量體溫、確認症狀備註</li>
+            <li>依號碼看診，過號 3 號內可補看</li>
+            <li>批價領藥，藥師說明用法</li>
+          </ol>
+        </article>
+
+        <article class="queue-board" aria-labelledby="queue-title">
+          <h3 id="queue-title"><span class="live-dot" aria-hidden="true"></span>即時叫號（示意）</h3>
+          <p style="margin:0;opacity:.8" id="queue-session">目前診次：—</p>
+          <div class="queue-now" aria-live="polite" aria-atomic="true"><span class="visually-hidden">目前看診號碼</span><span id="queue-now">012</span></div>
+          <div class="queue-meta">
+            <div><strong id="queue-waiting">8</strong><span>等候人數</span></div>
+            <div><strong id="queue-eta">約 40 分</strong><span>預估候診</span></div>
+            <div><strong id="queue-updated">--:--</strong><span>更新時間</span></div>
+          </div>
+          <p class="disclaimer">此為示意資料，實際號碼以診所現場叫號為準。</p>
+        </article>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <p><strong data-bind="clinic.name">晨光耳鼻喉科診所</strong>｜<span data-bind="clinic.department">耳鼻喉科</span></p>
+    <p><span data-bind="clinic.address"></span>｜電話 <span data-bind="clinic.phone"></span></p>
+    <p class="disclaimer">本網站僅提供預約與資訊參考，不取代醫師當面診斷。緊急狀況請撥打 119 或前往最近急診。</p>
+    <p style="margin-top:16px;opacity:.7">© 2026 晨光耳鼻喉科診所（網站原型，資料皆為示意）</p>
+  </div>
+</footer>
+
+<!-- 手機版固定底部行動按鈕 -->
+<div class="mobile-cta">
+  <a class="btn btn-ghost" id="cta-call" href="#">📞 來電</a>
+  <a class="btn btn-primary" href="#booking">📅 立即預約</a>
+</div>
+
+<script>
+/* =========================================================
+   資料模型：對應需求中的 6 個資料欄位
+   正式版可改為向後端 API 取得
+   ========================================================= */
+
+/** ClinicProfile：診所名稱、科別、地址、電話 */
+const ClinicProfile = {
+  name: "晨光耳鼻喉科診所",
+  department: "耳鼻喉科",
+  address: "台中市西區晨光路 128 號 1 樓",
+  phone: "04-2300-1234"
+};
+
+/** Doctor：姓名、專長、學經歷、理念 */
+const Doctor = {
+  name: "林語安",
+  specialties: ["過敏性鼻炎", "慢性鼻竇炎", "咽喉炎・聲音沙啞", "中耳炎・耳鳴", "兒童耳鼻喉", "打鼾評估"],
+  experience: [
+    "國立大學醫學系 畢業",
+    "醫學中心 耳鼻喉部 住院醫師、總醫師",
+    "區域醫院 耳鼻喉科 主治醫師（8 年）",
+    "中華民國耳鼻喉科專科醫師",
+    "晨光耳鼻喉科診所 院長"
+  ],
+  philosophy: "看診不是只開藥，而是讓你知道自己發生了什麼事。我會用你聽得懂的話說明病因、用藥與生活照顧，並和你一起決定治療方式。"
+};
+
+/** SessionType：診次名稱、星期、開始時間、結束時間、名額上限
+ *  weekdays: 1=週一 … 6=週六, 0=週日 */
+const SessionTypes = [
+  { id: "morning",  name: "早診",            category: "general", weekdays: [1,2,3,4,5,6], start: "09:00", end: "12:00", capacity: 30 },
+  { id: "afternoon",name: "午診",            category: "general", weekdays: [1,2,4,5],     start: "14:30", end: "17:30", capacity: 25 },
+  { id: "evening",  name: "夜診",            category: "general", weekdays: [1,2,3,5],     start: "18:30", end: "21:00", capacity: 30 },
+  { id: "allergy",  name: "過敏特別門診",    category: "special", weekdays: [3],           start: "14:30", end: "17:00", capacity: 12 },
+  { id: "kids",     name: "兒童耳鼻喉門診",  category: "special", weekdays: [6],           start: "14:00", end: "16:30", capacity: 15 }
+];
+/** 固定休診說明 */
+const ClosedRules = ["週日全天休診", "週四夜診休診", "週六下午僅開兒童特別門診", "國定假日另行公告"];
+
+/** ReminderPreference：簡訊提醒、複診提醒、取消規則 */
+const ReminderPreference = {
+  smsReminder: true,
+  followUpReminder: false,
+  cancellationRule: [
+    "看診前 2 小時以前可於簡訊連結或來電取消",
+    "未取消且未到診累計 3 次，將暫停線上預約 30 天",
+    "預約時段開始後 15 分鐘未報到，改為現場候補"
+  ]
+};
+
+/** AppointmentsSlot：日期、時段、已預約人數、狀態
+ *  以今天起 7 天動態產生示意資料（固定種子，重新整理結果一致） */
+let AppointmentsSlots = [];   // 於下方工具函式宣告後再產生（見「初始化」）
+
+/** PatientRequest：表單送出時組成（name / phone / symptomNote / isChronicPrescription） */
+let PatientRequest = null;
+
+/* ========== 工具函式 ========== */
+const WEEK = ["日","一","二","三","四","五","六"];
+const pad = n => String(n).padStart(2, "0");
+const isoDate = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const escapeHTML = s => String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+
+/** 依已預約人數計算狀態 */
+function slotStatus(booked, capacity) {
+  if (booked >= capacity) return "額滿";
+  if ((capacity - booked) / capacity < 0.3) return "接近額滿";
+  return "可預約";
+}
+
+/** 產生示意時段（可預測的偽隨機數，讓三種狀態都會出現） */
+function buildSlots(days) {
+  const out = [];
+  const today = new Date();
+  // 預約比例輪替表：確保「可預約／接近額滿／額滿」三種狀態都會出現
+  const ratios = [0.45, 0.85, 1, 0.3, 0.9, 0.6, 1, 0.5, 0.8, 0.35];
+  let k = (today.getDate() % 3);
+  for (let i = 0; i < days; i++) {
+    const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() + i);
+    const wd = d.getDay();
+    SessionTypes.filter(s => s.weekdays.includes(wd)).forEach(s => {
+      let ratio = ratios[k++ % ratios.length];
+      if (i === 0) ratio = Math.max(ratio, 0.8);                   // 當天名額通常較少
+      const booked = Math.min(s.capacity, Math.round(s.capacity * ratio));
+      out.push({ date: isoDate(d), sessionId: s.id, period: s.name, start: s.start, end: s.end,
+                 capacity: s.capacity, booked, status: slotStatus(booked, s.capacity) });
+    });
+  }
+  return out;
+}
+
+/* ========== 填入診所與醫師資料 ========== */
+function renderProfile() {
+  document.querySelectorAll('[data-bind^="clinic."]').forEach(el => {
+    const key = el.dataset.bind.split(".")[1];
+    el.textContent = ClinicProfile[key];
+  });
+  document.getElementById("clinic-address").textContent = ClinicProfile.address;
+  const tel = "tel:" + ClinicProfile.phone.replace(/-/g, "");
+  const phoneLink = document.getElementById("clinic-phone");
+  phoneLink.textContent = ClinicProfile.phone; phoneLink.href = tel;
+  document.getElementById("cta-call").href = tel;
+
+  document.getElementById("doctor-name").textContent = `${Doctor.name} 醫師`;
+  document.getElementById("doctor-experience").innerHTML = Doctor.experience.map(e => `<li>${escapeHTML(e)}</li>`).join("");
+  document.getElementById("doctor-specialties").innerHTML = Doctor.specialties.map(s => `<li>${escapeHTML(s)}</li>`).join("");
+  document.getElementById("doctor-philosophy").textContent = Doctor.philosophy;
+}
+
+/* ========== 診次表 ========== */
+function renderSchedule() {
+  const order = [1,2,3,4,5,6,0];
+  const rows = [
+    { label: "上午", sub: "09:00–12:00", ids: ["morning"] },
+    { label: "下午", sub: "14:00–17:30", ids: ["afternoon","allergy","kids"] },
+    { label: "夜間", sub: "18:30–21:00", ids: ["evening"] }
+  ];
+  const tbody = document.querySelector("#schedule-table tbody");
+  tbody.innerHTML = rows.map(r => {
+    const cells = order.map(wd => {
+      const s = SessionTypes.find(st => r.ids.includes(st.id) && st.weekdays.includes(wd));
+      if (!s) return `<td class="cell-closed">休診</td>`;
+      return s.category === "special"
+        ? `<td class="cell-special">★ ${s.name.replace("門診","")}</td>`
+        : `<td class="cell-open">● 門診</td>`;
+    }).join("");
+    return `<tr><th scope="row">${r.label}<small>${r.sub}</small></th>${cells}</tr>`;
+  }).join("");
+
+  const cards = SessionTypes.map(s => `
+    <div class="session-card ${s.category === "special" ? "special" : ""}">
+      <h3>${s.category === "special" ? "★ " : ""}${escapeHTML(s.name)}</h3>
+      <p>週${s.weekdays.map(w => WEEK[w]).join("、")}｜${s.start}–${s.end}</p>
+      <p>每診名額上限 ${s.capacity} 人</p>
+    </div>`).join("");
+  const closed = `<div class="session-card closed"><h3>休診日</h3>${ClosedRules.map(r => `<p>${r}</p>`).join("")}</div>`;
+  document.getElementById("session-cards").innerHTML = cards + closed;
+}
+
+/* =========================================================
+   前端持久化：localStorage
+   ---------------------------------------------------------
+   課堂重點：
+   1. localStorage 只能存「字串」→ 存入前 JSON.stringify，讀出後 JSON.parse
+   2. 資料只存在「這台裝置的這個瀏覽器」，別人看不到 → 不能真正控管名額
+   3. 無痕模式、儲存空間已滿或被封鎖時會丟出錯誤 → 一律用 try/catch 包起來
+   4. 不要把電話、病歷等敏感個資存在 localStorage（任何能操作這台電腦的人都看得到）
+   ========================================================= */
+const STORAGE_KEYS = {
+  bookings: "clinicDemo.v1.bookings",               // 預約紀錄陣列
+  prefs:    "clinicDemo.v1.reminderPreference"      // 提醒設定
+};
+
+/** 包一層安全的讀寫工具，任何錯誤都不會讓整個網頁停擺 */
+const Store = {
+  isAvailable() {
+    try {
+      const k = "__clinicDemo_test__";
+      localStorage.setItem(k, "1");
+      localStorage.removeItem(k);
+      return true;
+    } catch (err) { return false; }
+  },
+  read(key, fallback) {
+    try {
+      const raw = localStorage.getItem(key);       // 讀出來是字串或 null
+      return raw === null ? fallback : JSON.parse(raw);
+    } catch (err) {
+      console.warn("讀取 localStorage 失敗，改用預設值：", err);
+      return fallback;
+    }
+  },
+  write(key, value) {
+    try {
+      localStorage.setItem(key, JSON.stringify(value)); // 物件 → 字串
+      return true;
+    } catch (err) {
+      console.warn("寫入 localStorage 失敗：", err);
+      return false;
+    }
+  },
+  remove(key) { try { localStorage.removeItem(key); } catch (err) { /* 忽略 */ } }
+};
+const storageOK = Store.isAvailable();
+
+/** 「基礎名額」：模擬其他病人已預約的人數（每次載入都一樣） */
+let BaseSlots = [];
+
+/** 使用者在這個瀏覽器做的預約紀錄（真正被持久化的資料）
+ *  每筆格式：{ id, date, sessionId, period, start, end, queueNo, displayName, isChronicPrescription, createdAt }
+ *  注意：刻意「不存電話與症狀備註」，只存顯示用的遮罩姓名 */
+let myBookings = [];
+
+/** 讀取預約紀錄：過濾掉格式錯誤與已經過期的資料 */
+function loadBookings() {
+  const todayISO = isoDate(new Date());
+  const raw = Store.read(STORAGE_KEYS.bookings, []);
+  if (!Array.isArray(raw)) return [];
+  return raw.filter(b => b && typeof b.date === "string" && typeof b.sessionId === "string" && b.date >= todayISO);
+}
+function saveBookings() { Store.write(STORAGE_KEYS.bookings, myBookings); }
+
+/** 狀態是「推導」出來的：已預約人數 = 基礎人數 + 本瀏覽器的預約筆數
+ *  只存「事實」（預約紀錄），不存「結果」（人數、狀態），資料才不會互相矛盾 */
+function rebuildSlots() {
+  AppointmentsSlots = BaseSlots.map(base => {
+    const mine = myBookings.filter(b => b.date === base.date && b.sessionId === base.sessionId).length;
+    const booked = Math.min(base.capacity, base.booked + mine);
+    return { ...base, booked, status: slotStatus(booked, base.capacity) };
+  });
+}
+
+/** 姓名遮罩：王小明 → 王○明 */
+function maskName(name) {
+  const chars = [...name];
+  if (chars.length <= 1) return name;
+  if (chars.length === 2) return chars[0] + "○";
+  return chars[0] + "○".repeat(chars.length - 2) + chars[chars.length - 1];
+}
+
+/** 顯示「我的預約」清單（含取消按鈕） */
+function renderMyBookings() {
+  const list = document.getElementById("booking-list");
+  const empty = document.getElementById("booking-empty");
+  const sorted = [...myBookings].sort((a, b) => (a.date + a.start).localeCompare(b.date + b.start));
+  empty.hidden = sorted.length > 0;
+  list.innerHTML = sorted.map(b => {
+    const d = new Date(b.date + "T00:00:00");
+    return `<li class="booking-item">
+        <div>
+          <strong>${d.getMonth()+1}/${d.getDate()}（週${WEEK[d.getDay()]}）${escapeHTML(b.period)}・${b.queueNo} 號</strong>
+          <small>${escapeHTML(b.displayName)}｜${b.start}–${b.end}${b.isChronicPrescription ? "｜領慢箋" : ""}</small>
+        </div>
+        <button type="button" class="btn btn-danger btn-small" data-cancel="${escapeHTML(b.id)}">取消</button>
+      </li>`;
+  }).join("");
+  list.querySelectorAll("[data-cancel]").forEach(btn => btn.addEventListener("click", () => {
+    if (!confirm("確定要取消這筆預約嗎？")) return;
+    myBookings = myBookings.filter(b => b.id !== btn.dataset.cancel);
+    saveBookings();
+    refreshAll();
+  }));
+  renderStorageDump();
+}
+
+/** 教學面板：把 localStorage 原始字串印出來 */
+function renderStorageDump() {
+  const pre = document.getElementById("storage-dump");
+  if (!storageOK) { pre.textContent = "此瀏覽器目前無法使用 localStorage（可能是無痕模式或已封鎖網站資料）。"; return; }
+  let text = "";
+  Object.values(STORAGE_KEYS).forEach(key => {
+    let raw = null;
+    try { raw = localStorage.getItem(key); } catch (err) {}
+    text += `// key: ${key}\n${raw === null ? "(尚無資料)" : JSON.stringify(JSON.parse(raw), null, 2)}\n\n`;
+  });
+  pre.textContent = text.trim();
+}
+
+/** 資料變動後統一重畫 */
+function refreshAll() {
+  rebuildSlots();
+  renderSlots();
+  updateSummary();
+  renderMyBookings();
+}
+
+function initStorage() {
+  const badge = document.getElementById("storage-badge");
+  if (!storageOK) {
+    badge.textContent = "無法儲存（重新整理後會消失）";
+    badge.classList.add("off");
+  }
+  BaseSlots = buildSlots(7);
+  myBookings = loadBookings();
+  saveBookings();                    // 順便把過期的紀錄清掉
+
+  document.getElementById("btn-refresh-dump").addEventListener("click", renderStorageDump);
+  document.getElementById("btn-reset-storage").addEventListener("click", () => {
+    if (!confirm("將清除此瀏覽器中所有預約與提醒設定，確定嗎？")) return;
+    Object.values(STORAGE_KEYS).forEach(k => Store.remove(k));
+    myBookings = [];
+    ReminderPreference.smsReminder = true;
+    ReminderPreference.followUpReminder = false;
+    syncSwitches();
+    refreshAll();
+  });
+
+  // 同一台電腦開兩個分頁：另一個分頁改了資料，這裡會收到 storage 事件並同步
+  window.addEventListener("storage", e => {
+    if (!Object.values(STORAGE_KEYS).includes(e.key) && e.key !== null) return;
+    myBookings = loadBookings();
+    Object.assign(ReminderPreference, pickPrefs(Store.read(STORAGE_KEYS.prefs, {})));
+    syncSwitches();
+    refreshAll();
+  });
+}
+
+/* ========== 預約時段 ========== */
+let selectedDate = null;
+let selectedSlot = null;
+
+function renderDateTabs() {
+  const tabs = document.getElementById("date-tabs");
+  const today = new Date();
+  const dates = [...Array(7)].map((_, i) => new Date(today.getFullYear(), today.getMonth(), today.getDate() + i));
+  // 預設選第一個仍有名額的日期
+  selectedDate = selectedDate || (AppointmentsSlots.find(s => s.status !== "額滿") || {}).date || isoDate(dates[0]);
+  tabs.innerHTML = dates.map((d, i) => {
+    const iso = isoDate(d);
+    const label = i === 0 ? "今天" : i === 1 ? "明天" : `週${WEEK[d.getDay()]}`;
+    return `<button type="button" class="date-tab" role="tab" aria-selected="${iso === selectedDate}" data-date="${iso}">
+              <span>${label}</span><strong>${d.getMonth()+1}/${d.getDate()}</strong></button>`;
+  }).join("");
+  tabs.querySelectorAll(".date-tab").forEach(btn => btn.addEventListener("click", () => {
+    selectedDate = btn.dataset.date;
+    renderDateTabs(); renderSlots();
+  }));
+}
+
+function renderSlots() {
+  const list = document.getElementById("slot-list");
+  const slots = AppointmentsSlots.filter(s => s.date === selectedDate);
+  if (!slots.length) {
+    list.innerHTML = `<div class="empty-day">這天休診，請選擇其他日期 🙏</div>`;
+    return;
+  }
+  const badge = { "可預約": "badge-open", "接近額滿": "badge-near", "額滿": "badge-full" };
+  const bar = { "可預約": "var(--ok)", "接近額滿": "var(--warn)", "額滿": "var(--full)" };
+  list.innerHTML = slots.map(s => {
+    const remain = s.capacity - s.booked;
+    const pressed = selectedSlot && selectedSlot.date === s.date && selectedSlot.sessionId === s.sessionId;
+    const pct = Math.round(s.booked / s.capacity * 100);
+    return `
+      <button type="button" class="slot-card" data-id="${s.sessionId}" aria-pressed="${!!pressed}" ${s.status === "額滿" ? "disabled" : ""}
+              aria-label="${s.period} ${s.start} 至 ${s.end}，${s.status}，剩餘 ${remain} 位">
+        <div class="slot-top"><span class="slot-name">${s.period}</span><span class="badge ${badge[s.status]}">${s.status}</span></div>
+        <div class="slot-time">${s.start} – ${s.end}</div>
+        <div class="meter" aria-hidden="true"><i style="width:${pct}%;background:${bar[s.status]}"></i></div>
+        <div class="slot-count">已預約 ${s.booked} / 名額上限 ${s.capacity}${s.status === "額滿" ? "｜可現場候補" : `｜剩餘 ${remain} 位`}</div>
+      </button>`;
+  }).join("");
+  list.querySelectorAll(".slot-card:not([disabled])").forEach(card => card.addEventListener("click", () => {
+    selectedSlot = slots.find(s => s.sessionId === card.dataset.id);
+    renderSlots(); updateSummary();
+    // 手機版選完自動捲到表單
+    if (window.innerWidth < 1024) document.getElementById("booking-form").scrollIntoView({ behavior: "smooth", block: "start" });
+  }));
+}
+
+function updateSummary() {
+  const box = document.getElementById("selected-summary");
+  if (!selectedSlot) { box.className = "selected-summary empty"; box.textContent = "尚未選擇時段，請先點選時段卡片"; return; }
+  const d = new Date(selectedSlot.date + "T00:00:00");
+  box.className = "selected-summary";
+  box.textContent = `已選擇：${d.getMonth()+1}/${d.getDate()}（週${WEEK[d.getDay()]}）${selectedSlot.period} ${selectedSlot.start}–${selectedSlot.end}`;
+}
+
+/* ========== 提醒設定開關 ========== */
+/** 只接受布林值的開關欄位，避免 localStorage 被改壞時帶入怪資料 */
+function pickPrefs(obj) {
+  const out = {};
+  ["smsReminder", "followUpReminder"].forEach(k => { if (obj && typeof obj[k] === "boolean") out[k] = obj[k]; });
+  return out;
+}
+function syncSwitches() {
+  document.querySelectorAll(".switch").forEach(sw => sw.setAttribute("aria-checked", String(ReminderPreference[sw.dataset.pref])));
+}
+function initPreferences() {
+  // 讀回上次的提醒設定（取消規則是診所規定，不存）
+  Object.assign(ReminderPreference, pickPrefs(Store.read(STORAGE_KEYS.prefs, {})));
+  syncSwitches();
+  document.querySelectorAll(".switch").forEach(sw => {
+    sw.addEventListener("click", () => {
+      const v = sw.getAttribute("aria-checked") !== "true";
+      sw.setAttribute("aria-checked", String(v));
+      ReminderPreference[sw.dataset.pref] = v;
+      Store.write(STORAGE_KEYS.prefs, pickPrefs(ReminderPreference));
+      renderStorageDump();
+    });
+  });
+  document.querySelector("#cancel-rule ul").innerHTML = ReminderPreference.cancellationRule.map(r => `<li>${r}</li>`).join("");
+}
+
+/* ========== 表單驗證與送出 ========== */
+function initForm() {
+  const form = document.getElementById("booking-form");
+  const setError = (name, msg) => {
+    const el = form.querySelector(`[data-error-for="${name}"]`);
+    el.textContent = msg || "";
+    el.closest(".field").classList.toggle("invalid", !!msg);
+  };
+
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    const data = new FormData(form);
+    const name = data.get("name").trim();
+    const phone = data.get("phone").replace(/[\s-]/g, "");
+    const chronic = data.get("isChronicPrescription");
+    let ok = true;
+
+    setError("name", name ? "" : "請填寫姓名"); ok = ok && !!name;
+    // 台灣手機 09xxxxxxxx 或市話 0x-xxxxxxx(x)
+    const phoneOk = /^09\d{8}$/.test(phone) || /^0\d{1,2}\d{6,8}$/.test(phone);
+    setError("phone", phoneOk ? "" : "請輸入有效的手機或市話號碼"); ok = ok && phoneOk;
+    setError("isChronicPrescription", chronic ? "" : "請選擇是否領取慢箋"); ok = ok && !!chronic;
+
+    if (!selectedSlot) {
+      const box = document.getElementById("selected-summary");
+      box.textContent = "⚠ 請先選擇預約時段";
+      box.scrollIntoView({ behavior: "smooth", block: "center" });
+      ok = false;
+    }
+    if (!ok) { const first = form.querySelector(".invalid input, .invalid select"); if (first) first.focus(); return; }
+
+    PatientRequest = {
+      name,
+      phone,
+      symptomNote: data.get("symptomNote").trim(),
+      isChronicPrescription: chronic === "true"
+    };
+
+    // 送出前重新讀取最新資料（另一個分頁可能剛好預約走最後名額）
+    myBookings = loadBookings();
+    rebuildSlots();
+    const slot = AppointmentsSlots.find(s => s.date === selectedSlot.date && s.sessionId === selectedSlot.sessionId);
+    if (!slot || slot.status === "額滿") {
+      const box = document.getElementById("selected-summary");
+      box.className = "selected-summary";
+      box.textContent = "⚠ 此時段剛剛額滿，請改選其他時段";
+      selectedSlot = null; renderSlots();
+      return;
+    }
+
+    // 新增一筆預約紀錄 → 寫入 localStorage → 由紀錄重新推導名額與狀態
+    // （正式版應改為 fetch() 送到後端 API，由伺服器判斷名額）
+    const queueNo = String(slot.booked + 1).padStart(3, "0");
+    myBookings.push({
+      id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+      date: slot.date,
+      sessionId: slot.sessionId,
+      period: slot.period,
+      start: slot.start,
+      end: slot.end,
+      queueNo,
+      displayName: maskName(PatientRequest.name),   // 只存遮罩後的姓名
+      isChronicPrescription: PatientRequest.isChronicPrescription,
+      createdAt: new Date().toISOString()
+    });
+    const saved = storageOK && Store.write(STORAGE_KEYS.bookings, myBookings);
+    const d = new Date(slot.date + "T00:00:00");
+
+    const success = document.getElementById("booking-success");
+    success.innerHTML = `
+      <h3>✅ 預約成功（示意）</h3>
+      <p style="margin:0">${escapeHTML(PatientRequest.name)} 您好，您已預約 <strong>${d.getMonth()+1}/${d.getDate()}（週${WEEK[d.getDay()]}）${slot.period}</strong>，看診號碼 <strong>${queueNo}</strong>。</p>
+      <p style="margin:6px 0 0;font-size:.88rem">${saved ? "這筆預約已存在此瀏覽器，重新整理後仍會保留，可在下方「我的預約」取消。" : "⚠ 此瀏覽器無法儲存資料，重新整理後預約會消失。"}</p>
+      <p style="margin:6px 0 0">${ReminderPreference.smsReminder ? "我們將於看診前一天以簡訊提醒您。" : "您已關閉簡訊提醒，請自行留意看診時間。"}
+      ${PatientRequest.isChronicPrescription ? "領慢箋請記得攜帶健保卡與原處方箋。" : ""}</p>
+      <p class="disclaimer">本網站僅提供預約與資訊參考，不取代醫師當面診斷</p>`;
+    success.classList.add("show");
+    success.focus();
+    console.log("PatientRequest", PatientRequest, "ReminderPreference", ReminderPreference);
+
+    form.reset(); selectedSlot = null; refreshAll();
+  });
+
+  // 輸入時清除錯誤
+  form.querySelectorAll("input, select").forEach(el => el.addEventListener("input", () => setError(el.name, "")));
+}
+
+/* ========== 即時號碼示意 ========== */
+function initQueue() {
+  const now = new Date();
+  const hm = now.getHours() * 60 + now.getMinutes();
+  const current = SessionTypes.find(s => {
+    if (!s.weekdays.includes(now.getDay())) return false;
+    const [sh, sm] = s.start.split(":").map(Number), [eh, em] = s.end.split(":").map(Number);
+    return hm >= sh * 60 + sm && hm <= eh * 60 + em;
+  });
+  const sessionEl = document.getElementById("queue-session");
+  sessionEl.textContent = current ? `目前診次：${current.name}（${current.start}–${current.end}）` : "目前非看診時段，以下為示意畫面";
+
+  let num = 12, waiting = 8;
+  const tick = () => {
+    document.getElementById("queue-now").textContent = String(num).padStart(3, "0");
+    document.getElementById("queue-waiting").textContent = waiting;
+    document.getElementById("queue-eta").textContent = waiting ? `約 ${waiting * 5} 分` : "無需等候";
+    const t = new Date();
+    document.getElementById("queue-updated").textContent = `${pad(t.getHours())}:${pad(t.getMinutes())}`;
+  };
+  tick();
+  setInterval(() => {               // 每 15 秒模擬叫下一號
+    num += 1;
+    waiting = Math.max(0, waiting - 1 + (Math.random() < 0.5 ? 1 : 0));
+    tick();
+  }, 15000);
+}
+
+/* ========== 初始化 ========== */
+initStorage();        // 讀取 localStorage 中的預約紀錄
+rebuildSlots();       // 基礎名額 + 我的預約 → 推導出目前狀態
+renderProfile();
+renderSchedule();
+renderDateTabs();
+renderSlots();
+renderMyBookings();
+initPreferences();
+initForm();
+initQueue();
+</script>
+</body>
+</html>
